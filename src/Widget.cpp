@@ -6,33 +6,20 @@
 
 //--------------------------------------------------------------------------------------------------
 Widget::Widget(Widget* parent) : _parent(parent) {
-  _hwnd = createHandle(parent);
-  Environment::registerWidget(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 Widget::~Widget() {
-  std::cout << "onDestroy\n";
+  std::cout << "Widget::~Widget\n";
 }
-
-//--------------------------------------------------------------------------------------------------
-Widget::Handle* Widget::createHandle(Widget* parent) {
-  return reinterpret_cast<Handle*>(CreateWindowEx(0, Environment::className(), "Widget",
-                                                  WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-                                                  800, 600, NULL, NULL, Environment::hInstance(), NULL));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Widget::onCreate() {}
 
 //--------------------------------------------------------------------------------------------------
 void Widget::onResize(int w, int h) {
-  std::cout << "onResize: " << w << "x" << h << "\n";
+  std::cout << "Widget::onResize: " << w << "x" << h << "\n";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Widget::onClose() {
-  std::cout << "onClose\n";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -43,4 +30,16 @@ void Widget::show() {
 //--------------------------------------------------------------------------------------------------
 void Widget::hide() {
   ShowWindow(reinterpret_cast<HWND>(_hwnd), SW_HIDE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Widget::setHandle(Handle* handle) {
+  _hwnd = handle;
+  Environment::registerWidget(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+Widget::Handle* Widget::getNewId() {
+  static int currentId = 100;
+  return reinterpret_cast<Handle*>(++currentId);
 }

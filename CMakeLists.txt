@@ -10,11 +10,13 @@ set(APP_ICON_RESOURCE_WINDOWS resources.rc)
 
 include_directories("src")
 
-add_executable(app WIN32
+add_executable(app
   main.cpp 
 
   src/Application.cpp 
   src/Widget.cpp 
+  src/Panel.cpp 
+  src/PushButton.cpp 
   src/internal/Environment.cpp
 
   app.manifest 

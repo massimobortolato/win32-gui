@@ -2,6 +2,7 @@
 
 #include <windows.h>
 
+#include <list>
 #include <map>
 #include <optional>
 
@@ -10,6 +11,7 @@
 class Environment {
   std::optional<HINSTANCE> _hInstance;
   std::map<HWND, Widget*> _widgets;
+  std::list<HWND> _topHandles;
 
   std::optional<Widget*> widgetForHwnd(HWND hwnd) {
     auto it = _widgets.find(hwnd);
@@ -25,12 +27,13 @@ class Environment {
 
   LRESULT WindowProc_(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   LRESULT D2DSurfaceProc_(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  void destroyWidget(Widget* widget);
 
  public:
   static void initialize(HINSTANCE hInstance);
 
   static void registerWidget(Widget* widget) {
-    auto hwnd = reinterpret_cast<HWND>(widget->_hwnd);
+    auto hwnd = reinterpret_cast<HWND>(widget->handle());
     instance()._widgets.insert({hwnd, widget});
   }
 
